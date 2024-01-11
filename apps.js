@@ -5,12 +5,12 @@ const graph2Element = document.getElementById('graph2')
 
 loginFormElement.addEventListener('submit', (event) => {
     event.preventDefault()
-    const username = document.getElementById('username').value
-    const password = document.getElementById('password').value
-    authenticateUser(username, password, "https://01.kood.tech/api/auth/signin")
+    const usernameValue = document.getElementById('username').value
+    const passwordValue = document.getElementById('password').value
+    authorizeUser(usernameValue, passwordValue, "https://01.kood.tech/api/auth/signin")
 })
 
-async function authenticateUser(username, password, url) {
+async function authorizeUser(username, password, url) {
     const authRequest = {
         method: 'POST',
         headers: {
@@ -18,7 +18,7 @@ async function authenticateUser(username, password, url) {
         }
     }
 
-    let response = await getResponse(authRequest, url)
+    let response = await getServerResponse(authRequest, url)
 
     if (response && response != 0) {
         loginFormElement.style.display = 'none'
@@ -30,7 +30,7 @@ async function authenticateUser(username, password, url) {
     }
 }
 
-async function getResponse(request, url) {
+async function getServerResponse(request, url) {
     let response = await fetch(url, request)
     if (response.ok) {
         let jsonResponse = await response.json()
@@ -49,46 +49,53 @@ async function fetchData(token, url) {
         })
     }
 
-    let userResponse = await getResponse(graphqlRequest, url)
+    let userResponse = await getServerResponse(graphqlRequest, url)
 
     if (userResponse && userResponse != 0) {
-        processUserData(userResponse)
+        decipherUserData(userResponse)
     }
     else console.error("failed graphql request")
 }
 
 let userQuery = `
-                query {
-                    user {
-                        id
-                        login
-                        attrs
-                        auditRatio
-                        totalDown
-                        totalUp
-                        transactions(where: {event: {id: {_eq: 85}}}) {
-                            type
-                            amount
-                            object {
-                              name
-                            }
-                        }
-                    }
-                }`
+    query {
+        user {
+            id
+            login
+            attrs
+            auditRatio
+            totalDown
+            totalUp
+            transactions(where: {event: {id: {_eq: 85}}}) {
+                type
+                amount
+                object {
+                    name
+                }
+            }
+        }
+    }`
 
-function processUserData(userResponse) {
+function decipherUserData(userResponse) {
     const userData = userResponse.data.user[0].attrs
     document.body.style.backgroundColor="#000000"
     profileElement.innerHTML += `
-        <h1>Welcome, ${userData.firstName} ${userData.lastName}!</h1>
-        <label>Name: ${userData.firstName} ${userData.lastName}</label><br>
-        <label>Date Of Birth: ${new Date(userData.dateOfBirth).toLocaleDateString()}</label><br>
-        <label>Country: ${userData.addressCountry}</label><br>
+        <h1>Hi, ${userData.firstName}!</h1>
+        <label>Student: ${userData.firstName} ${userData.lastName}</label><br>
+        <label>Profile ID: ${userData.UserId}</label><br>
+        <label>Nationality: ${userData.nationality}</label><br>
         <label>City: ${userData.addressCity}</label><br>
+        <label>Tel: ${userData.tel}</label><br>
+        <label>Email: ${userData.email}</label><br>
+        <label>Profile Created: ${userData.createdAt}</label><br>
+        <label>Counts: ${userData.totalUp}</label><br>
+        <label>First transaction: ${userData.firstUpTransaction}</label><br>
+        <label>Last transaction: ${userData.lastUpTransaction}</label><br>
+        <label>Down transaction: ${userData.lastDownTransaction}</label><br>
         <button class="btnlogin" type="submit" id="logout">Logout</button>
     `
-    let logoutElement = document.getElementById('logout')
-    logoutElement.addEventListener('click', () => {
+    let logoutButton = document.getElementById('logout')
+    logoutButton.addEventListener('click', () => {
         localStorage.clear()
         window.location.reload()
     })
@@ -96,20 +103,22 @@ function processUserData(userResponse) {
     let auditRatio = userResponse.data.user[0].auditRatio;
     let auditsDone = userResponse.data.user[0].totalUp
     let auditsReceived = userResponse.data.user[0].totalDown
-    generateAuditRatioChart(auditsDone, auditsReceived, auditRatio)
+    displayAuditRatioChart(auditsDone, auditsReceived, auditRatio)
 
     const projects = Object.values(userResponse.data.user[0].transactions)
     let totalXP = 0
     let points = [], names = []
-    projects.forEach((item) => {if (item.type === 'xp') {
-        totalXP += item.amount
-        points.push(item.amount)
-        names.push(item.object.name)
-    }});
-    generateProjectsChart(names, points, totalXP)
+    projects.forEach((item) => {
+        if (item.type === 'xp') {
+            totalXP += item.amount
+            points.push(item.amount)
+            names.push(item.object.name)
+        }
+    });
+    displayProjectsChart(names, points, totalXP)
 }
 
-function generateAuditRatioChart(done, received, ratio){
+function displayAuditRatioChart(done, received, ratio) {
     graph1Element.innerHTML += `
         <figure class="highcharts-figure">
             <div id="container1"></div>
@@ -168,7 +177,7 @@ function generateAuditRatioChart(done, received, ratio){
     });
 }
 
-function generateProjectsChart(names, points, totalXP){
+function displayProjectsChart(names, points, totalXP) {
     let data = []
     for(let i = 0; i < names.length; i++){
         data.push([names[i], points[i]])

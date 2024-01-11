@@ -1,35 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <title>GraphQL Profile Page</title>
+    <title>Graphgl</title>
 </head>
 <body>
-    <div class="container">
-        <form id="login-form" class="login-form">
-            <h1>Login to Access Your Profile</h1>
+    <form id="loginFormElement">
+        <h1>Log In To See Your Profile Page</h1>
 
-            <label for="username">Username:</label>
-            <input type="text" id="username" required>
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" required><br>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" required>
+        <p id="failed-login" style="color: rgb(222, 217, 251); font-weight: 700; font-style: italic; font-family: Verdana, Geneva, Tahoma, sans-serif;"></p>
+        <button class="btnlogin" type="submit">Login</button>
+    </form>
 
-            <p id="failed-login" class="error-message"></p>
-            <button class="login-button" type="submit">Login</button>
-        </form>
-
-        <div id="profile-container" class="profile-container"></div>
-        <div id="graph1-container" class="graph-container"></div>
-        <div id="graph2-container" class="graph-container"></div>
-    </div>
+    <div id="profileElement"></div>
+    <div id="graph1Element"></div>
+    <div id="graph2Element"></div>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="app.js"></script>
+    <script src="apps.js"></script>
 </body>
 </html>
