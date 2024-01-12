@@ -5,10 +5,13 @@
     <title>Graphgl</title>
 </head>
 <body>
-    <form id="loginFormElement">
-        <h1>Log In To See Your Profile Page</h1>
+    <div id="profileElement" style="float: left; margin-left: 20px;"></div>
+    <div id="logout" style="float: right; margin-right: 20px; margin-top: 10px;"></div>
 
-        <label for="username">Username:</label><br>
+    <form id="loginFormElement">
+        <h1>"Please log in using your student credentials to access and view your profile."</h1>
+
+        <label for="username">User name:</label><br>
         <input type="text" id="username" required><br>
         <label for="password">Password:</label><br>
         <input type="password" id="password" required><br>
@@ -17,7 +20,6 @@
         <button class="btnlogin" type="submit">Login</button>
     </form>
 
-    <div id="profileElement"></div>
     <div id="graph1Element"></div>
     <div id="graph2Element"></div>
 
