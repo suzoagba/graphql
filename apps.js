@@ -77,26 +77,23 @@ let userQuery = `
     }`;
 
 function decipherUserData(userResponse) {
-    const userData = userResponse.data.user[0].attrs;
+    console.log(userResponse.data);
+    const {user} = userResponse.data;
+    const userData = user[0].attrs;
+    const ID = user[0].id;
+
     document.body.style.backgroundColor = "#000000";
-    // profileElement.style.position = 'relative'; // Ensure the position is relative for absolute positioning inside it
-    // profileElement.style.textAlign = 'left';
-    // profileElement.style.margin = '2%';
 
     profileElement.innerHTML += `
         <h1>Hi, ${userData.firstName}!</h1>
         <label>Student: ${userData.firstName} ${userData.lastName}</label><br>
-        <label>Profile ID: ${userData.UserId}</label><br>
+        <label>Profile ID: ${ID}</label><br>
+        <label>Gender: ${userData.gender}</label><br>
         <label>Nationality: ${userData.nationality}</label><br>
         <label>City: ${userData.addressCity}</label><br>
         <label>Tel: ${userData.tel}</label><br>
         <label>Email: ${userData.email}</label><br>
-        <label>Profile Created: ${userData.createdAt}</label><br>
-        <label>Counts: ${userData.totalUp}</label><br>
-        <label>First transaction: ${userData.firstUpTransaction}</label><br>
-        <label>Last transaction: ${userData.lastUpTransaction}</label><br>
-        <label>Down transaction: ${userData.lastDownTransaction}</label><br>
-    `;
+        `   
 
     let logoutContainer = document.createElement('div');
     logoutContainer.style.position = 'absolute';
@@ -190,8 +187,8 @@ function displayAuditRatioChart(done, received, ratio) {
                 y: received
             }],
             colors: [
-                '#9cffcb',
-                '#dcff9c'
+                '#a5ea8e',
+                '#e8acda'
             ]
         }]
     });
@@ -209,7 +206,7 @@ function displayProjectsChart(names, points, totalXP) {
         </figure>
     `;
     Highcharts.chart('container2', {
-        chart: {
+        graph: {
             backgroundColor: 'transparent',
             plotBackgroundColor: null,
             plotBorderWidth: null,
@@ -220,7 +217,7 @@ function displayProjectsChart(names, points, totalXP) {
             text: `<span style="font-size: 20px">Projects Completed: ${names.length}<br/>Total XP: ${totalXP} bytes</span>`,
             align: 'center',
             style: {
-                color: 'white',
+                color: 'navy',
                 fontWeight: "bold"
             }
         },
@@ -231,7 +228,7 @@ function displayProjectsChart(names, points, totalXP) {
                 style: {
                     fontSize: '13px',
                     fontFamily: 'Verdana, sans-serif',
-                    color: 'white'
+                    color: 'navy'
                 }
             }
         },
@@ -240,12 +237,12 @@ function displayProjectsChart(names, points, totalXP) {
             title: {
                 text: 'Project XP',
                 style: {
-                    color: 'white'
+                    color: 'navy'
                 }
             },
             labels: {
                 style: {
-                    color: 'white'
+                    color: 'navy'
                 }
             }
         },
