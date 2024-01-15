@@ -78,7 +78,7 @@ let userQuery = `
 
 function decipherUserData(userResponse) {
     console.log(userResponse.data);
-    const {user} = userResponse.data;
+    const {user} = userResponse.data; //object destructuring
     const userData = user[0].attrs;
     const ID = user[0].id;
 
@@ -115,22 +115,22 @@ function decipherUserData(userResponse) {
     });
     logoutContainer.appendChild(logoutButton);
 
-    let auditRatio = userResponse.data.user[0].auditRatio;
-    let auditsDone = userResponse.data.user[0].totalUp;
-    let auditsReceived = userResponse.data.user[0].totalDown;
+    let auditRatio = user[0].auditRatio;
+    let auditsDone = user[0].totalUp;
+    let auditsReceived = user[0].totalDown;
     displayAuditRatioChart(auditsDone, auditsReceived, auditRatio);
 
-    const projects = Object.values(userResponse.data.user[0].transactions);
+    const projects = Object.values(user[0].transactions);
     let totalXP = 0;
     let points = [], names = [];
-    projects.forEach((item) => {
-        if (item.type === 'xp') {
-            totalXP += item.amount;
-            points.push(item.amount);
-            names.push(item.object.name);
+    projects.forEach(({type, amount, object}) => {
+        if (type === 'xp') {
+            names.push(object.name);
+            totalXP += amount;
+            points.push(amount);
         }
     });
-    displayProjectsChart(names, points, totalXP);
+    displayProjectsGraph(names, points, totalXP);
 }
 
 function displayAuditRatioChart(done, received, ratio) {
@@ -147,7 +147,7 @@ function displayAuditRatioChart(done, received, ratio) {
             plotBorderWidth: null,
             plotShadow: false,
             type: 'pie',
-            spacing: [0, 0, 0, 0], // Adjust spacing for the donut chart
+            spacing: [0, 0, 0, 0], 
         },
         title: {
             text: `<span style="font-size: 20px">Current Audit Ratio: ${Math.round(ratio * 10) / 10}</span>`,
@@ -194,7 +194,7 @@ function displayAuditRatioChart(done, received, ratio) {
     });
 }
 
-function displayProjectsChart(names, points, totalXP) {
+function displayProjectsGraph(names, points, totalXP) {
     let data = [];
     for (let i = 0; i < names.length; i++) {
         data.push([names[i], points[i]]);
@@ -214,7 +214,7 @@ function displayProjectsChart(names, points, totalXP) {
             type: 'column'
         },
         title: {
-            text: `<span style="font-size: 20px">Projects Completed: ${names.length}<br/>Total XP: ${totalXP} bytes</span>`,
+            text: `<span style="font-size: 20px"> Completed Projects : ${names.length}<br/> Accumulated XP: ${totalXP} bytes</span>`,
             align: 'center',
             style: {
                 color: 'navy',
@@ -235,7 +235,7 @@ function displayProjectsChart(names, points, totalXP) {
         yAxis: {
             min: 0,
             title: {
-                text: 'Project XP',
+                text: 'Accumulated XP',
                 style: {
                     color: 'navy'
                 }
