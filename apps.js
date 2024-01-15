@@ -121,16 +121,16 @@ function decipherUserData(userResponse) {
     displayAuditRatioChart(auditsDone, auditsReceived, auditRatio);
 
     const projects = Object.values(user[0].transactions);
-    let totalXP = 0;
+    let AccumulatedXP = 0;
     let points = [], names = [];
     projects.forEach(({type, amount, object}) => {
         if (type === 'xp') {
             names.push(object.name);
-            totalXP += amount;
+            AccumulatedXP += amount;
             points.push(amount);
         }
     });
-    displayProjectsGraph(names, points, totalXP);
+    displayProjectsGraph(names, points, AccumulatedXP);
 }
 
 function displayAuditRatioChart(done, received, ratio) {
@@ -194,7 +194,7 @@ function displayAuditRatioChart(done, received, ratio) {
     });
 }
 
-function displayProjectsGraph(names, points, totalXP) {
+function displayProjectsGraph(names, points, AccumulatedXP) {
     let data = [];
     for (let i = 0; i < names.length; i++) {
         data.push([names[i], points[i]]);
@@ -214,7 +214,7 @@ function displayProjectsGraph(names, points, totalXP) {
             type: 'column'
         },
         title: {
-            text: `<span style="font-size: 20px"> Completed Projects : ${names.length}<br/> Accumulated XP: ${totalXP} bytes</span>`,
+            text: `<span style="font-size: 20px"> Completed Projects : ${names.length}<br/> Accumulated XP: ${AccumulatedXP} bytes</span>`,
             align: 'center',
             style: {
                 color: 'navy',

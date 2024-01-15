@@ -32,8 +32,8 @@ body {
 
 #profileElement {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    text-align: left; /* Adjusted to align text to the left */
-    margin: 20px; /* Added margin for spacing */
+    text-align: left; 
+    margin: 20px; 
     color: #ffffff;
 }
 
